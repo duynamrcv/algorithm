@@ -14,7 +14,7 @@ using namespace std;
 typedef pair<int, int> Pair;
 
 // create a shortcut for pair<float, pair<int, int>> type
-typedef pair<float, pair<int, int>> pPair;
+typedef pair<float, pair<int, int> > pPair;
 
 // struct to hold the neccesary params
 struct cell
@@ -175,14 +175,307 @@ void aStarSearch(int grid[][COL], Pair src, Pair dest)
         // (i+1, j-1)   (i+1, j)    (i+1, j+1)
 
         // to store the 'g', 'h'. 'f' of 8 successors
-        double g_new, h_new, f_new;
+        double gNew, hNew, fNew;
 
-        
-    }
+        //----------- 1st Successor (North) ------------ 
+        if (isValid(i-1, j) == true) 
+        { 
+            if (isDestination(i-1, j, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i-1][j].parent_i = i; 
+                cellDetails[i-1][j].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath (cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+            else if (closedList[i-1][j] == false && isUnBlocked(grid, i-1, j) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.0; 
+                hNew = calculateHValue (i-1, j, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i-1][j].f == FLT_MAX || cellDetails[i-1][j].f > fNew) 
+                { 
+                    openList.insert( make_pair(fNew, make_pair(i-1, j))); 
+  
+                    // Update the details of this cell 
+                    cellDetails[i-1][j].f = fNew; 
+                    cellDetails[i-1][j].g = gNew; 
+                    cellDetails[i-1][j].h = hNew; 
+                    cellDetails[i-1][j].parent_i = i; 
+                    cellDetails[i-1][j].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 2nd Successor (South) ------------ 
+        if (isValid(i+1, j) == true) 
+        { 
+            if (isDestination(i+1, j, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i+1][j].parent_i = i; 
+                cellDetails[i+1][j].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath(cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+            else if (closedList[i+1][j] == false && 
+                     isUnBlocked(grid, i+1, j) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.0; 
+                hNew = calculateHValue(i+1, j, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i+1][j].f == FLT_MAX || cellDetails[i+1][j].f > fNew) 
+                { 
+                    openList.insert( make_pair (fNew, make_pair (i+1, j))); 
+                    // Update the details of this cell 
+                    cellDetails[i+1][j].f = fNew; 
+                    cellDetails[i+1][j].g = gNew; 
+                    cellDetails[i+1][j].h = hNew; 
+                    cellDetails[i+1][j].parent_i = i; 
+                    cellDetails[i+1][j].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 3rd Successor (East) ------------ 
+        if (isValid (i, j+1) == true) 
+        { 
+            if (isDestination(i, j+1, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i][j+1].parent_i = i; 
+                cellDetails[i][j+1].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath(cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+
+            else if (closedList[i][j+1] == false && isUnBlocked (grid, i, j+1) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.0; 
+                hNew = calculateHValue (i, j+1, dest); 
+                fNew = gNew + hNew; 
+ 
+                if (cellDetails[i][j+1].f == FLT_MAX || cellDetails[i][j+1].f > fNew) 
+                { 
+                    openList.insert( make_pair(fNew, make_pair (i, j+1))); 
+  
+                    // Update the details of this cell 
+                    cellDetails[i][j+1].f = fNew; 
+                    cellDetails[i][j+1].g = gNew; 
+                    cellDetails[i][j+1].h = hNew; 
+                    cellDetails[i][j+1].parent_i = i; 
+                    cellDetails[i][j+1].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 4th Successor (West) ------------ 
+        if (isValid(i, j-1) == true) 
+        {
+            if (isDestination(i, j-1, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i][j-1].parent_i = i; 
+                cellDetails[i][j-1].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath(cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+
+            else if (closedList[i][j-1] == false && isUnBlocked(grid, i, j-1) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.0; 
+                hNew = calculateHValue(i, j-1, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i][j-1].f == FLT_MAX || cellDetails[i][j-1].f > fNew) 
+                { 
+                    openList.insert( make_pair (fNew, make_pair (i, j-1))); 
+  
+                    // Update the details of this cell 
+                    cellDetails[i][j-1].f = fNew; 
+                    cellDetails[i][j-1].g = gNew; 
+                    cellDetails[i][j-1].h = hNew; 
+                    cellDetails[i][j-1].parent_i = i; 
+                    cellDetails[i][j-1].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 5th Successor (North-East) ------------ 
+        if (isValid(i-1, j+1) == true) 
+        { 
+            if (isDestination(i-1, j+1, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i-1][j+1].parent_i = i; 
+                cellDetails[i-1][j+1].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath (cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+
+            else if (closedList[i-1][j+1] == false && isUnBlocked(grid, i-1, j+1) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.414; 
+                hNew = calculateHValue(i-1, j+1, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i-1][j+1].f == FLT_MAX || cellDetails[i-1][j+1].f > fNew) 
+                { 
+                    openList.insert( make_pair (fNew, make_pair(i-1, j+1))); 
+  
+                    // Update the details of this cell 
+                    cellDetails[i-1][j+1].f = fNew; 
+                    cellDetails[i-1][j+1].g = gNew; 
+                    cellDetails[i-1][j+1].h = hNew; 
+                    cellDetails[i-1][j+1].parent_i = i; 
+                    cellDetails[i-1][j+1].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 6th Successor (North-West) ------------ 
+        if (isValid (i-1, j-1) == true) 
+        { 
+            if (isDestination (i-1, j-1, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i-1][j-1].parent_i = i; 
+                cellDetails[i-1][j-1].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath (cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+
+            else if (closedList[i-1][j-1] == false && isUnBlocked(grid, i-1, j-1) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.414; 
+                hNew = calculateHValue(i-1, j-1, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i-1][j-1].f == FLT_MAX || cellDetails[i-1][j-1].f > fNew) 
+                { 
+                    openList.insert( make_pair (fNew, make_pair (i-1, j-1))); 
+                    // Update the details of this cell 
+                    cellDetails[i-1][j-1].f = fNew; 
+                    cellDetails[i-1][j-1].g = gNew; 
+                    cellDetails[i-1][j-1].h = hNew; 
+                    cellDetails[i-1][j-1].parent_i = i; 
+                    cellDetails[i-1][j-1].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 7th Successor (South-East) ------------ 
+        if (isValid(i+1, j+1) == true) 
+        { 
+            if (isDestination(i+1, j+1, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i+1][j+1].parent_i = i; 
+                cellDetails[i+1][j+1].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath (cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+
+            else if (closedList[i+1][j+1] == false && isUnBlocked(grid, i+1, j+1) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.414; 
+                hNew = calculateHValue(i+1, j+1, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i+1][j+1].f == FLT_MAX || cellDetails[i+1][j+1].f > fNew) 
+                { 
+                    openList.insert(make_pair(fNew, make_pair (i+1, j+1))); 
+  
+                    // Update the details of this cell 
+                    cellDetails[i+1][j+1].f = fNew; 
+                    cellDetails[i+1][j+1].g = gNew; 
+                    cellDetails[i+1][j+1].h = hNew; 
+                    cellDetails[i+1][j+1].parent_i = i; 
+                    cellDetails[i+1][j+1].parent_j = j; 
+                } 
+            } 
+        } 
+  
+        //----------- 8th Successor (South-West) ------------ 
+        if (isValid (i+1, j-1) == true) 
+        {
+            if (isDestination(i+1, j-1, dest) == true) 
+            { 
+                // Set the Parent of the destination cell 
+                cellDetails[i+1][j-1].parent_i = i; 
+                cellDetails[i+1][j-1].parent_j = j; 
+                cout << "The destination cell is found\n"; 
+                tracePath(cellDetails, dest); 
+                foundDest = true; 
+                return; 
+            } 
+
+            else if (closedList[i+1][j-1] == false && isUnBlocked(grid, i+1, j-1) == true) 
+            { 
+                gNew = cellDetails[i][j].g + 1.414; 
+                hNew = calculateHValue(i+1, j-1, dest); 
+                fNew = gNew + hNew; 
+
+                if (cellDetails[i+1][j-1].f == FLT_MAX || cellDetails[i+1][j-1].f > fNew) 
+                { 
+                    openList.insert(make_pair(fNew, make_pair(i+1, j-1))); 
+  
+                    // Update the details of this cell 
+                    cellDetails[i+1][j-1].f = fNew; 
+                    cellDetails[i+1][j-1].g = gNew; 
+                    cellDetails[i+1][j-1].h = hNew; 
+                    cellDetails[i+1][j-1].parent_i = i; 
+                    cellDetails[i+1][j-1].parent_j = j; 
+                } 
+            } 
+        } 
+    } 
+
+    if (foundDest == false) 
+        cout << "Failed to find the Destination Cell\n"; 
+  
+    return;     
     
 }
 
 int main()
 {
+     /* Description of the Grid- 
+     1--> The cell is not blocked 
+     0--> The cell is blocked    */
+    int grid[ROW][COL] = 
+    { 
+        { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 }, 
+        { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 }, 
+        { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 }, 
+        { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 }, 
+        { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 }, 
+        { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 }, 
+        { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 }, 
+        { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 }, 
+        { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } 
+    }; 
+   
+    Pair src = make_pair(8, 0); 
+    Pair dest = make_pair(0, 9); 
+
+    aStarSearch(grid, src, dest);
+    cout << endl;
     return 0;
 }
